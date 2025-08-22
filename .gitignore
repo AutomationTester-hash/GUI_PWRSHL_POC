@@ -1,0 +1,37 @@
+# .gitignore for C#/.NET/SpecFlow/WinAppDriver project
+# Build results
+/bin/
+/obj/
+TestResults/
+*.trx
+*.user
+*.suo
+*.cache
+*.log
+
+# VS Code
+.vscode/
+
+# Rider
+.idea/
+
+# User-specific files
+*.userprefs
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Others
+*.vspscc
+*.vssscc
+*.pdb
+*.dbmdl
+*.bak
+*.swp
+*.tmp
+
+# SpecFlow generated files
+*.feature.cs
