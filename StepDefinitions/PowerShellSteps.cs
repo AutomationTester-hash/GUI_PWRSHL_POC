@@ -15,56 +15,55 @@ namespace RemoteWinAppAutomation.StepDefinitions
     [Binding]
     public class PowerShellSteps
     {
-        private static System.Diagnostics.Process _virtualBoxProcess;
-        [Given("I open Oracle VirtualBox Manager")]
-    // Opens the Oracle VirtualBox Manager application.
-        public void GivenIOpenOracleVirtualBoxManager()
+    private static System.Diagnostics.Process _customAppProcess;
+        [Given("I open Custom App")]
+    // Opens the Custom App application.
+        public void GivenIOpenCustomApp()
         {
-            Console.WriteLine("[PowerShellSteps] Opening Oracle VirtualBox Manager");
+            Console.WriteLine("[PowerShellSteps] Opening Custom App");
             // You may want to get this from config, for now hardcode or use your config helper
-            var vboxPath = _config?["PowerShell:VBoxManagePath"];
-            if (string.IsNullOrEmpty(vboxPath))
-                vboxPath = "C:\\Program Files\\Oracle\\VirtualBox\\VBoxManage.exe";
-            var vboxUIPath = vboxPath.Replace("VBoxManage.exe", "VirtualBox.exe");
-            _virtualBoxProcess = new System.Diagnostics.Process
+            var appPath = _config?["PowerShell:CustomPath"];
+            if (string.IsNullOrEmpty(appPath))
+                throw new Exception("Custom App path not set in appsettings.json under PowerShell:AppPath");
+            _customAppProcess = new System.Diagnostics.Process
             {
                 StartInfo = new System.Diagnostics.ProcessStartInfo
                 {
-                    FileName = vboxUIPath,
+                    FileName = appPath,
                     UseShellExecute = true
                 }
             };
-            _virtualBoxProcess.Start();
+            _customAppProcess.Start();
             System.Threading.Thread.Sleep(3000);
-            if (_virtualBoxProcess.HasExited)
-                throw new Exception($"VirtualBox Manager did not start. Tried path: {vboxUIPath}");
+            if (_customAppProcess.HasExited)
+                throw new Exception($"Custom App did not start. Tried path: {appPath}");
         }
 
-        [When("I close Oracle VirtualBox Manager")]
-    // Closes the Oracle VirtualBox Manager application if it is running.
-        public void WhenICloseOracleVirtualBoxManager()
+        [When("I close Custom App")]
+    // Closes the Custom App application if it is running.
+        public void WhenICloseCustomApp()
         {
-            if (_virtualBoxProcess != null && !_virtualBoxProcess.HasExited)
+            if (_customAppProcess != null && !_customAppProcess.HasExited)
             {
-                Console.WriteLine($"[PowerShellSteps] Attempting to close VirtualBox Manager (PID: {_virtualBoxProcess.Id})");
-                _virtualBoxProcess.Kill();
-                _virtualBoxProcess.WaitForExit(5000);
-                Console.WriteLine("[PowerShellSteps] Closed VirtualBox Manager via process reference.");
+                Console.WriteLine($"[PowerShellSteps] Attempting to close Custom App (PID: {_customAppProcess.Id})");
+                _customAppProcess.Kill();
+                _customAppProcess.WaitForExit(5000);
+                Console.WriteLine("[PowerShellSteps] Closed Custom App via process reference.");
             }
             else
             {
-                Console.WriteLine("[PowerShellSteps] VirtualBox Manager process was not running or already closed.");
+                Console.WriteLine("[PowerShellSteps] Custom App process was not running or already closed.");
             }
     }
         [When(@"I wait for 5 seconds after opening custom app")]
-    // Waits for 5 seconds, then tries to close the VirtualBox Manager application.
+    // Waits for 5 seconds, then tries to close the Custom App application.
         public void WhenIWaitFor5SecondsAfterOpeningCustomApp()
         {
             var startTime = DateTime.Now;
-            Console.WriteLine($"[PowerShellSteps] Starting 5 second wait before closing VirtualBox Manager at {startTime:HH:mm:ss.fff}");
+            Console.WriteLine($"[PowerShellSteps] Starting 5 second wait before closing Custom App at {startTime:HH:mm:ss.fff}");
             System.Threading.Thread.Sleep(5000);
-            var procs = System.Diagnostics.Process.GetProcessesByName("VirtualBox");
-            Console.WriteLine($"[PowerShellSteps] Found {procs.Length} VirtualBox.exe process(es) to close.");
+            var procs = System.Diagnostics.Process.GetProcessesByName("CustomApp");
+            Console.WriteLine($"[PowerShellSteps] Found {procs.Length} CustomApp.exe process(es) to close.");
             foreach (var proc in procs)
             {
                 try
@@ -84,7 +83,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
                 }
             }
             var endTime = DateTime.Now;
-            Console.WriteLine($"[PowerShellSteps] Finished VirtualBox Manager close step at {endTime:HH:mm:ss.fff}, duration: {(endTime-startTime).TotalSeconds:F2} seconds");
+            Console.WriteLine($"[PowerShellSteps] Finished Custom App close step at {endTime:HH:mm:ss.fff}, duration: {(endTime-startTime).TotalSeconds:F2} seconds");
         }
         [When(@"I run the executable from config key '(.*)'")]
     // Runs a program specified in the configuration file.

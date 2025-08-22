@@ -20,6 +20,6 @@
   And I wait for 5 seconds after opening Calculator
 
   Scenario: Open and close custom app via Automation
-    Given I open Oracle VirtualBox Manager
-    When I close Oracle VirtualBox Manager
+    Given I open Custom App
+    When I close Custom App
   

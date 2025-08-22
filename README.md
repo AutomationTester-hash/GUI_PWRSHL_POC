@@ -14,7 +14,8 @@ This framework automates PowerShell command execution on a remote Windows VM usi
 ## Getting Started
 1. Start WinAppDriver on the target VM (default port 4723).
 2. Ensure port 4723 is open on the VM firewall.
-3. Update `appsettings.json` with VM details and credentials.
+3. Update `appsettings.json` with VM details, credentials, and the app path under `PowerShell:CustomPath`.
+	- To automate a different app, simply change the value of `CustomPath` in `appsettings.json`—no code changes are needed.
 4. Build the project:
 	```
 	dotnet build
