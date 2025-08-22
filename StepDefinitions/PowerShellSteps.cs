@@ -17,6 +17,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
     {
         private static System.Diagnostics.Process _virtualBoxProcess;
         [Given("I open Oracle VirtualBox Manager")]
+    // Opens the Oracle VirtualBox Manager application.
         public void GivenIOpenOracleVirtualBoxManager()
         {
             Console.WriteLine("[PowerShellSteps] Opening Oracle VirtualBox Manager");
@@ -40,6 +41,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
         [When("I close Oracle VirtualBox Manager")]
+    // Closes the Oracle VirtualBox Manager application if it is running.
         public void WhenICloseOracleVirtualBoxManager()
         {
             if (_virtualBoxProcess != null && !_virtualBoxProcess.HasExited)
@@ -55,6 +57,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
             }
     }
         [When(@"I wait for 5 seconds after opening custom app")]
+    // Waits for 5 seconds, then tries to close the VirtualBox Manager application.
         public void WhenIWaitFor5SecondsAfterOpeningCustomApp()
         {
             var startTime = DateTime.Now;
@@ -84,6 +87,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
             Console.WriteLine($"[PowerShellSteps] Finished VirtualBox Manager close step at {endTime:HH:mm:ss.fff}, duration: {(endTime-startTime).TotalSeconds:F2} seconds");
         }
         [When(@"I run the executable from config key '(.*)'")]
+    // Runs a program specified in the configuration file.
         public void WhenIRunTheExecutableFromConfigKey(string configKey)
         {
             string exePath = _config[configKey];
@@ -104,11 +108,13 @@ namespace RemoteWinAppAutomation.StepDefinitions
             WhenIRunTheExecutable(exePath);
         }
         [When(@"I wait for 5 seconds after opening Calculator")]
+    // Waits for 5 seconds after opening the Calculator application.
         public void WhenIWaitFor5SecondsAfterOpeningCalculator()
         {
             System.Threading.Thread.Sleep(5000);
         }
         [AfterScenario]
+    // Cleans up and closes any open applications after each test scenario.
         public void AfterScenarioCleanup()
         {
             // Attempt to close Notepad, Calculator, VirtualBox, and CustomApp if running
@@ -136,6 +142,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         private string _output;
 
         [BeforeTestRun]
+    // Sets up configuration and reporting before any tests run.
         public static void BeforeTestRun()
         {
             Console.WriteLine("[PowerShellSteps] BeforeTestRun executing - test framework is running.");
@@ -144,6 +151,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
     [Given(@"I have initialized the application for automation")]
+    // Initializes the application and test session for automation.
     public void GivenIHaveInitializedTheApplicationForAutomation()
         {
             Console.WriteLine("[PowerShellSteps] GivenIHaveConnectedToTheRemoteVMPowerShell executing.");
@@ -185,6 +193,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
     [When(@"I enter the command ""(.*)""")]
+        // Enters a command into the PowerShell window.
         public void WhenIEnterTheCommand(string command)
         {
             if (_psPage == null)
@@ -199,12 +208,14 @@ namespace RemoteWinAppAutomation.StepDefinitions
             // Optionally, wait for output
         }
     [Given(@"I set the PowerShell execution policy to Unrestricted")]
+        // Sets the PowerShell execution policy to allow all scripts to run.
         public void GivenISetThePowerShellExecutionPolicyToUnrestricted()
         {
             RemoteWinAppAutomation.Utils.PowerShellRunner.RunCommand("Set-ExecutionPolicy Unrestricted -Scope Process -Force");
         }
 
     [Then(@"the output should contain ""(.*)""")]
+        // Checks if the output contains the expected text.
         public void ThenTheOutputShouldContain(string expected)
         {
             _output = _psPage.GetOutput();
@@ -218,6 +229,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
          [When(@"I erase the text in Notepad after 2 seconds")]
+    // Waits for 2 seconds, then erases all text in Notepad.
         public void WhenIEraseTheTextInNotepadAfter2Seconds()
         {
             System.Threading.Thread.Sleep(2000);
@@ -230,6 +242,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
         [When(@"I run the executable '(.*)'")]
+    // Runs the specified executable file.
         public void WhenIRunTheExecutable(string exePath)
         {
             // Run the .exe and capture output
@@ -253,6 +266,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
         [Then(@"the executable output should contain '(.*)'")]
+    // Checks if the output from the executable contains the expected text.
         public void ThenTheExecutableOutputShouldContain(string expected)
         {
             Console.WriteLine($"[PowerShellSteps] Executable output: {_output}");
@@ -269,12 +283,14 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
         [When(@"I run the PowerShell command '(.*)'")]
+    // Runs the specified PowerShell command.
         public void WhenIRunThePowerShellCommand(string command)
         {
             _output = RemoteWinAppAutomation.Utils.PowerShellRunner.RunCommand(command);
         }
 
         [Then(@"the PowerShell output should contain '(.*)'")]
+    // Checks if the PowerShell command output contains the expected text.
         public void ThenThePowerShellOutputShouldContain(string expected)
         {
             Console.WriteLine($"[PowerShellSteps] PowerShell output: {_output}");
@@ -295,6 +311,7 @@ namespace RemoteWinAppAutomation.StepDefinitions
         }
 
         [AfterTestRun]
+    // Cleans up the test session and saves the report after all tests are done.
         public static void AfterTestRun()
         {
             _driver?.Quit();
